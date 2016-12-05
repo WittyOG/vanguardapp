@@ -1,6 +1,7 @@
 package com.example.james.cardfightvanguardcalculator;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,13 +14,17 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     Integer attackNum;
     Integer buttonPressed;
+    Integer attack;
 
+    int firstAtt = 0;
+    int secondAtt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         //Initialise buttons
         Button rearL = (Button) findViewById(R.id.button2);
@@ -28,11 +33,15 @@ public class MainActivity extends AppCompatActivity {
         Button rearBL = (Button) findViewById(R.id.button4);
         Button rearBM = (Button) findViewById(R.id.button5);
         Button rearBR = (Button) findViewById(R.id.button6);
-        final Button[] buttons = {rearL, vanguard, rearR, rearBL, rearBM, rearBR};
+        Button vanguardE = (Button) findViewById(R.id.button7);
+        Button rearER = (Button) findViewById(R.id.button8);
+        Button rearEL = (Button) findViewById(R.id.button9);
+
+        Button attack = (Button) findViewById(R.id.button10);
+
+        final Button[] buttons = {rearL, vanguard, rearR, rearBL, rearBM, rearBR, vanguardE, rearER, rearEL};
 
 
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Input Attack Power");
         //Set input
         final EditText input = new EditText(this);
@@ -60,8 +69,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         final AlertDialog alertDialog = builder.create();
-;
 
         //Set button OnClickListeners
         rearL.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +121,89 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Set enemy buttons OnClickListeners
 
+        rearER.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonPressed = 7;
+                alertDialog.show();
+            }
+        });
+
+        rearEL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonPressed = 8;
+                alertDialog.show();
+            }
+        });
+
+        vanguardE.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonPressed = 6;
+                alertDialog.show();
+            }
+
+        });
+
+        attack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetAlert("Input the attack of your attacking unit, Trig=+5000.", 1);
+
+            }
+        });
 
     }
-}
+
+    private void resetAlert(String title, final Integer attack){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        //Set input
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (attack == 1) {
+                    try {
+                        firstAtt = Integer.parseInt(input.getText().toString());
+                        resetAlert("Input the attack of the enemies unit, Trig=+5000.", 2);
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "Input a  number please you meatball", Toast.LENGTH_LONG).show();
+                    }
+
+                } else if (attack == 2) {
+                    try {
+                        secondAtt = Integer.parseInt(input.getText().toString());
+
+                        if (firstAtt >= secondAtt) {
+                            Toast.makeText(getApplicationContext(), "Your attack went through!", Toast.LENGTH_LONG).show();
+                        } else{
+                            Toast.makeText(getApplicationContext(), "Your attack did not go through...", Toast.LENGTH_LONG).show();
+                        }
+
+                    } catch (Exception e) {
+                        Toast.makeText(MainActivity.this, "Input a  number please you meatball", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+            }
+
+        });
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+}}
+
+
+
+
+
