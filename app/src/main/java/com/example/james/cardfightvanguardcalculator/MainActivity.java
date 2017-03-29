@@ -9,7 +9,10 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 public class MainActivity extends AppCompatActivity {
     Integer attackNum;
@@ -60,6 +63,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        final ImageView imageView = (ImageView) findViewById(R.id.gifView);
+        //Implementing Glide library to load gif into imageView
+        Glide.with(this).load(R.drawable.attack).asGif().into(imageView);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageView.setVisibility(View.INVISIBLE);
+            }
+        });
 
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -71,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         final AlertDialog alertDialog = builder.create();
-
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                imageView.setVisibility(View.VISIBLE);
+            }
+        });
         //Set button OnClickListeners
         rearL.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 buttonPressed = 3;
                 alertDialog.show();
+
             }
         });
 
@@ -110,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 buttonPressed = 4;
                 alertDialog.show();
+
             }
         });
 
@@ -158,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void resetAlert(String title, final Integer attack){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title);
@@ -165,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         builder.setView(input);
+        final ImageView imageView = (ImageView) findViewById(R.id.gifView);
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -174,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         firstAtt = Integer.parseInt(input.getText().toString());
                         resetAlert("Input the attack of the enemies unit, Trig=+5000.", 2);
+
                     } catch (Exception e) {
                         Toast.makeText(MainActivity.this, "Input a  number please you meatball", Toast.LENGTH_LONG).show();
                     }
@@ -193,9 +216,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
-
             }
-
         });
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
