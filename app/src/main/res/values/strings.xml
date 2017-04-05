@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">"Cardfight!! Vanguard Calculator "</string>
+    <string name="title_activity_log">logActivity</string>
 </resources>
